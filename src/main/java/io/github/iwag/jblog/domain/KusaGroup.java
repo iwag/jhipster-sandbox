@@ -43,7 +43,7 @@ public class KusaGroup implements Serializable {
 
     @OneToMany(mappedBy = "kusaGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<KusaActivity> activities = new HashSet<>();
+    private Set<KusaActivity> actvities = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -106,29 +106,29 @@ public class KusaGroup implements Serializable {
         this.accountUser = accountUser;
     }
 
-    public Set<KusaActivity> getActivities() {
-        return activities;
+    public Set<KusaActivity> getActvities() {
+        return actvities;
     }
 
-    public KusaGroup activities(Set<KusaActivity> kusaActivities) {
-        this.activities = kusaActivities;
+    public KusaGroup actvities(Set<KusaActivity> kusaActivities) {
+        this.actvities = kusaActivities;
         return this;
     }
 
-    public KusaGroup addActivities(KusaActivity kusaActivity) {
-        this.activities.add(kusaActivity);
+    public KusaGroup addActvities(KusaActivity kusaActivity) {
+        this.actvities.add(kusaActivity);
         kusaActivity.setKusaGroup(this);
         return this;
     }
 
-    public KusaGroup removeActivities(KusaActivity kusaActivity) {
-        this.activities.remove(kusaActivity);
+    public KusaGroup removeActvities(KusaActivity kusaActivity) {
+        this.actvities.remove(kusaActivity);
         kusaActivity.setKusaGroup(null);
         return this;
     }
 
-    public void setActivities(Set<KusaActivity> kusaActivities) {
-        this.activities = kusaActivities;
+    public void setActvities(Set<KusaActivity> kusaActivities) {
+        this.actvities = kusaActivities;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

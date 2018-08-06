@@ -45,6 +45,7 @@ public class CacheConfiguration {
             cm.createCache(io.github.iwag.jblog.domain.KusaActivity.class.getName(), jcacheConfiguration);
             cm.createCache(io.github.iwag.jblog.domain.AccountUser.class.getName() + ".groups", jcacheConfiguration);
             cm.createCache(io.github.iwag.jblog.domain.KusaGroup.class.getName() + ".activities", jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.KusaGroup.class.getName() + ".actvities", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -8,7 +8,7 @@ export interface IKusaGroup {
   body?: string;
   startedAt?: Moment;
   accountUser?: IAccountUser;
-  activities?: IKusaActivity[];
+  actvities?: IKusaActivity[];
 }
 
 export const defaultValue: Readonly<IKusaGroup> = {};

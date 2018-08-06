@@ -29,7 +29,7 @@ public class KusaActivity implements Serializable {
     private ZonedDateTime doneAt;
 
     @ManyToOne
-    @JsonIgnoreProperties("activities")
+    @JsonIgnoreProperties("actvities")
     private KusaGroup kusaGroup;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

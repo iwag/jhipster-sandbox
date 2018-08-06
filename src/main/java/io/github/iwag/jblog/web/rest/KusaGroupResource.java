@@ -1,7 +1,9 @@
 package io.github.iwag.jblog.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.iwag.jblog.domain.KusaActivity;
 import io.github.iwag.jblog.domain.KusaGroup;
+import io.github.iwag.jblog.repository.KusaActivityRepository;
 import io.github.iwag.jblog.repository.KusaGroupRepository;
 import io.github.iwag.jblog.web.rest.errors.BadRequestAlertException;
 import io.github.iwag.jblog.web.rest.util.HeaderUtil;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,9 +32,11 @@ public class KusaGroupResource {
     private static final String ENTITY_NAME = "kusaGroup";
 
     private final KusaGroupRepository kusaGroupRepository;
+    private final KusaActivityRepository kusaActivityRepository;
 
-    public KusaGroupResource(KusaGroupRepository kusaGroupRepository) {
+    public KusaGroupResource(KusaGroupRepository kusaGroupRepository, KusaActivityRepository kusaActivityRepository) {
         this.kusaGroupRepository = kusaGroupRepository;
+        this.kusaActivityRepository = kusaActivityRepository;
     }
 
     /**
@@ -99,6 +104,8 @@ public class KusaGroupResource {
     public ResponseEntity<KusaGroup> getKusaGroup(@PathVariable Long id) {
         log.debug("REST request to get KusaGroup : {}", id);
         Optional<KusaGroup> kusaGroup = kusaGroupRepository.findById(id);
+        List<KusaActivity> list = kusaActivityRepository.findAllByGroupId(kusaGroup.get().getId());
+        kusaGroup.ifPresent(c -> c.setActvities(new HashSet<>(list)));
         return ResponseUtil.wrapOrNotFound(kusaGroup);
     }
 
