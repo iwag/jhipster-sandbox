@@ -38,6 +38,13 @@ public class CacheConfiguration {
             cm.createCache(io.github.iwag.jblog.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(io.github.iwag.jblog.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(io.github.iwag.jblog.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.AccountUser.class.getName(), jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.AccountUser.class.getName() + ".accountUsers", jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.KusaGroup.class.getName(), jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.KusaGroup.class.getName() + ".kusaGroups", jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.KusaActivity.class.getName(), jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.AccountUser.class.getName() + ".groups", jcacheConfiguration);
+            cm.createCache(io.github.iwag.jblog.domain.KusaGroup.class.getName() + ".activities", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
