@@ -14,7 +14,7 @@
     "enableHibernateCache": true,
     "websocket": false,
     "databaseType": "sql",
-    "devDatabaseType": "h2Memory",
+    "devDatabaseType": "h2Disk",
     "prodDatabaseType": "postgresql",
     "searchEngine": false,
     "messageBroker": false,
@@ -23,12 +23,16 @@
     "enableSwaggerCodegen": true,
     "jwtSecretKey": "b796ca2c990fae176803efe0d09daf433f393ed0",
     "clientFramework": "react",
-    "useSass": true,
+    "useSass": false,
     "clientPackageManager": "yarn",
     "testFrameworks": [
       "gatling"
     ],
     "jhiPrefix": "jhi",
-    "enableTranslation": false
+    "enableTranslation": true,
+    "languages": [
+      "en",
+      "ja"
+    ]
   }
 }

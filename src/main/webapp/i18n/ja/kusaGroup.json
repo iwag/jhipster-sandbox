@@ -1,0 +1,25 @@
+
+{
+    "blogApp": {
+        "kusaGroup" : {
+            "home": {
+                "title": "KusaGroups",
+                "createLabel": "Kusa Group を追加",
+                "createOrEditLabel": "Kusa Groupを追加または編集"
+            },
+            "created": "A new Kusa Group is created with identifier {{ param }}",
+            "updated": "A Kusa Group is updated with identifier {{ param }}",
+            "deleted": "A Kusa Group is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Kusa Group {{ id }}を削除してもよろしいですか？"
+            },
+            "detail": {
+                "title": "Kusa Group"
+            },
+            "title": "Title",
+            "body": "Body",
+            "actvities": "Actvities",
+            "user": "User"
+        }
+    }
+}

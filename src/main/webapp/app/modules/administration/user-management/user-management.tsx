@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Table, Row, Badge } from 'reactstrap';
 import {
+  Translate,
   ICrudGetAllAction,
   ICrudPutAction,
   TextFormat,
@@ -63,33 +64,45 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     return (
       <div>
         <h2 className="userManagement-page-heading">
-          Users
+          <Translate contentKey="userManagement.home.title">Users</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-            <FontAwesomeIcon icon="plus" /> Create a new user
+            <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
           </Link>
         </h2>
         <Table responsive striped>
           <thead>
             <tr>
               <th className="hand" onClick={this.sort('id')}>
-                ID<FontAwesomeIcon icon="sort" />
+                <Translate contentKey="global.field.id">ID</Translate>
+                <FontAwesomeIcon icon="sort" />
               </th>
               <th className="hand" onClick={this.sort('login')}>
-                Login<FontAwesomeIcon icon="sort" />
+                <Translate contentKey="userManagement.login">Login</Translate>
+                <FontAwesomeIcon icon="sort" />
               </th>
               <th className="hand" onClick={this.sort('email')}>
-                Email<FontAwesomeIcon icon="sort" />
+                <Translate contentKey="userManagement.email">Email</Translate>
+                <FontAwesomeIcon icon="sort" />
               </th>
               <th />
-              <th>Profiles</th>
+              <th className="hand" onClick={this.sort('langKey')}>
+                <Translate contentKey="userManagement.langKey">Lang Key</Translate>
+                <FontAwesomeIcon icon="sort" />
+              </th>
+              <th>
+                <Translate contentKey="userManagement.profiles">Profiles</Translate>
+              </th>
               <th className="hand" onClick={this.sort('createdDate')}>
-                Created Date<FontAwesomeIcon icon="sort" />
+                <Translate contentKey="userManagement.createdDate">Created Date</Translate>
+                <FontAwesomeIcon icon="sort" />
               </th>
               <th className="hand" onClick={this.sort('lastModifiedBy')}>
-                Last Modified By<FontAwesomeIcon icon="sort" />
+                <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate>
+                <FontAwesomeIcon icon="sort" />
               </th>
               <th className="hand" onClick={this.sort('lastModifiedDate')}>
-                Last Modified Date<FontAwesomeIcon icon="sort" />
+                <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate>
+                <FontAwesomeIcon icon="sort" />
               </th>
               <th />
             </tr>
@@ -115,6 +128,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                     </Button>
                   )}
                 </td>
+                <td>{user.langKey}</td>
                 <td>
                   {user.authorities
                     ? user.authorities.map((authority, j) => (
@@ -134,10 +148,16 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                 <td className="text-right">
                   <div className="btn-group flex-btn-group-container">
                     <Button tag={Link} to={`${match.url}/${user.login}`} color="info" size="sm">
-                      <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                      <FontAwesomeIcon icon="eye" />{' '}
+                      <span className="d-none d-md-inline">
+                        <Translate contentKey="entity.action.view">View</Translate>
+                      </span>
                     </Button>
                     <Button tag={Link} to={`${match.url}/${user.login}/edit`} color="primary" size="sm">
-                      <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                      <FontAwesomeIcon icon="pencil-alt" />{' '}
+                      <span className="d-none d-md-inline">
+                        <Translate contentKey="entity.action.edit">Edit</Translate>
+                      </span>
                     </Button>
                     <Button
                       tag={Link}
@@ -146,7 +166,10 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                       size="sm"
                       disabled={account.login === user.login}
                     >
-                      <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                      <FontAwesomeIcon icon="trash" />{' '}
+                      <span className="d-none d-md-inline">
+                        <Translate contentKey="entity.action.delete">Delete</Translate>
+                      </span>
                     </Button>
                   </div>
                 </td>

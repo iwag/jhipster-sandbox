@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { ICrudGetAllAction, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAllAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -24,18 +24,25 @@ export class KusaActivity extends React.Component<IKusaActivityProps> {
     return (
       <div>
         <h2 id="kusa-activity-heading">
-          Kusa Activities
+          <Translate contentKey="blogApp.kusaActivity.home.title">Kusa Activities</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
-            <FontAwesomeIcon icon="plus" />&nbsp; Create new Kusa Activity
+            <FontAwesomeIcon icon="plus" />&nbsp;
+            <Translate contentKey="blogApp.kusaActivity.home.createLabel">Create new Kusa Activity</Translate>
           </Link>
         </h2>
         <div className="table-responsive">
           <Table responsive>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Done At</th>
-                <th>Kusa Group</th>
+                <th>
+                  <Translate contentKey="global.field.id">ID</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="blogApp.kusaActivity.doneAt">Done At</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="blogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -56,13 +63,22 @@ export class KusaActivity extends React.Component<IKusaActivityProps> {
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${kusaActivity.id}`} color="info" size="sm">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        <FontAwesomeIcon icon="eye" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.view">View</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${kusaActivity.id}/edit`} color="primary" size="sm">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${kusaActivity.id}/delete`} color="danger" size="sm">
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
                       </Button>
                     </div>
                   </td>

@@ -31,7 +31,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         loader: 'stripcomment-loader'
       },
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.css$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -39,11 +39,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
               publicPath: '../'
             }
           },
-          'css-loader',
-          'postcss-loader',
-          'sass-loader'
+          'css-loader'
         ]
-      },
+      }
     ]
   },
   optimization: {
@@ -75,6 +73,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     }),
     new MomentLocalesPlugin({
       localesToKeep: [
+        'en',
+        'ja'
         // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
       ]
     }),

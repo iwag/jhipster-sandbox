@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IKusaGroup } from 'app/shared/model/kusa-group.model';
@@ -30,14 +30,22 @@ export class KusaGroupDeleteDialog extends React.Component<IKusaGroupDeleteDialo
     const { kusaGroupEntity } = this.props;
     return (
       <Modal isOpen toggle={this.handleClose}>
-        <ModalHeader toggle={this.handleClose}>Confirm delete operation</ModalHeader>
-        <ModalBody>Are you sure you want to delete this KusaGroup?</ModalBody>
+        <ModalHeader toggle={this.handleClose}>
+          <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
+        </ModalHeader>
+        <ModalBody>
+          <Translate contentKey="blogApp.kusaGroup.delete.question" interpolate={{ id: kusaGroupEntity.id }}>
+            Are you sure you want to delete this KusaGroup?
+          </Translate>
+        </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.handleClose}>
-            <FontAwesomeIcon icon="ban" />&nbsp; Cancel
+            <FontAwesomeIcon icon="ban" />&nbsp;
+            <Translate contentKey="entity.action.cancel">Cancel</Translate>
           </Button>
           <Button color="danger" onClick={this.confirmDelete}>
-            <FontAwesomeIcon icon="trash" />&nbsp; Delete
+            <FontAwesomeIcon icon="trash" />&nbsp;
+            <Translate contentKey="entity.action.delete">Delete</Translate>
           </Button>
         </ModalFooter>
       </Modal>

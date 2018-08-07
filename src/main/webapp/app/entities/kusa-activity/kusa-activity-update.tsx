@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -90,7 +90,9 @@ export class KusaActivityUpdate extends React.Component<IKusaActivityUpdateProps
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h2 id="blogApp.kusaActivity.home.createOrEditLabel">Create or edit a KusaActivity</h2>
+            <h2 id="blogApp.kusaActivity.home.createOrEditLabel">
+              <Translate contentKey="blogApp.kusaActivity.home.createOrEditLabel">Create or edit a KusaActivity</Translate>
+            </h2>
           </Col>
         </Row>
         <Row className="justify-content-center">
@@ -101,13 +103,15 @@ export class KusaActivityUpdate extends React.Component<IKusaActivityUpdateProps
               <AvForm model={isNew ? {} : kusaActivityEntity} onSubmit={this.saveEntity}>
                 {!isNew ? (
                   <AvGroup>
-                    <Label for="id">ID</Label>
+                    <Label for="id">
+                      <Translate contentKey="global.field.id">ID</Translate>
+                    </Label>
                     <AvInput id="kusa-activity-id" type="text" className="form-control" name="id" required readOnly />
                   </AvGroup>
                 ) : null}
                 <AvGroup>
                   <Label id="doneAtLabel" for="doneAt">
-                    Done At
+                    <Translate contentKey="blogApp.kusaActivity.doneAt">Done At</Translate>
                   </Label>
                   <AvInput
                     id="kusa-activity-doneAt"
@@ -118,7 +122,9 @@ export class KusaActivityUpdate extends React.Component<IKusaActivityUpdateProps
                   />
                 </AvGroup>
                 <AvGroup>
-                  <Label for="kusaGroup.id">Kusa Group</Label>
+                  <Label for="kusaGroup.id">
+                    <Translate contentKey="blogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
+                  </Label>
                   <AvInput
                     id="kusa-activity-kusaGroup"
                     type="select"
@@ -138,11 +144,14 @@ export class KusaActivityUpdate extends React.Component<IKusaActivityUpdateProps
                 </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/kusa-activity" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
-                  <span className="d-none d-md-inline">Back</span>
+                  <span className="d-none d-md-inline">
+                    <Translate contentKey="entity.action.back">Back</Translate>
+                  </span>
                 </Button>
                 &nbsp;
                 <Button color="primary" id="save-entity" type="submit" disabled={updating}>
-                  <FontAwesomeIcon icon="save" />&nbsp; Save
+                  <FontAwesomeIcon icon="save" />&nbsp;
+                  <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
               </AvForm>
             )}

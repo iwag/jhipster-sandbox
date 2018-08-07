@@ -4,12 +4,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IAccountUser } from 'app/shared/model/account-user.model';
-import { getEntities as getAccountUsers } from 'app/entities/account-user/account-user.reducer';
+import { IUser } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './kusa-group.reducer';
 import { IKusaGroup } from 'app/shared/model/kusa-group.model';
 // tslint:disable-next-line:no-unused-variable
@@ -20,14 +20,14 @@ export interface IKusaGroupUpdateProps extends StateProps, DispatchProps, RouteC
 
 export interface IKusaGroupUpdateState {
   isNew: boolean;
-  accountUserId: number;
+  userId: number;
 }
 
 export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKusaGroupUpdateState> {
   constructor(props) {
     super(props);
     this.state = {
-      accountUserId: 0,
+      userId: 0,
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -39,12 +39,10 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
       this.props.getEntity(this.props.match.params.id);
     }
 
-    this.props.getAccountUsers();
+    this.props.getUsers();
   }
 
   saveEntity = (event, errors, values) => {
-    values.startedAt = new Date(values.startedAt);
-
     if (errors.length === 0) {
       const { kusaGroupEntity } = this.props;
       const entity = {
@@ -65,17 +63,17 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
     this.props.history.push('/entity/kusa-group');
   };
 
-  accountUserUpdate = element => {
-    const id = element.target.value.toString();
-    if (id === '') {
+  userUpdate = element => {
+    const login = element.target.value.toString();
+    if (login === '') {
       this.setState({
-        accountUserId: -1
+        userId: -1
       });
     } else {
-      for (const i in this.props.accountUsers) {
-        if (id === this.props.accountUsers[i].id.toString()) {
+      for (const i in this.props.users) {
+        if (login === this.props.users[i].login.toString()) {
           this.setState({
-            accountUserId: this.props.accountUsers[i].id
+            userId: this.props.users[i].id
           });
         }
       }
@@ -83,14 +81,16 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
   };
 
   render() {
-    const { kusaGroupEntity, accountUsers, loading, updating } = this.props;
+    const { kusaGroupEntity, users, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h2 id="blogApp.kusaGroup.home.createOrEditLabel">Create or edit a KusaGroup</h2>
+            <h2 id="blogApp.kusaGroup.home.createOrEditLabel">
+              <Translate contentKey="blogApp.kusaGroup.home.createOrEditLabel">Create or edit a KusaGroup</Translate>
+            </h2>
           </Col>
         </Row>
         <Row className="justify-content-center">
@@ -101,48 +101,34 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
               <AvForm model={isNew ? {} : kusaGroupEntity} onSubmit={this.saveEntity}>
                 {!isNew ? (
                   <AvGroup>
-                    <Label for="id">ID</Label>
+                    <Label for="id">
+                      <Translate contentKey="global.field.id">ID</Translate>
+                    </Label>
                     <AvInput id="kusa-group-id" type="text" className="form-control" name="id" required readOnly />
                   </AvGroup>
                 ) : null}
                 <AvGroup>
                   <Label id="titleLabel" for="title">
-                    Title
+                    <Translate contentKey="blogApp.kusaGroup.title">Title</Translate>
                   </Label>
                   <AvField id="kusa-group-title" type="text" name="title" />
                 </AvGroup>
                 <AvGroup>
                   <Label id="bodyLabel" for="body">
-                    Body
+                    <Translate contentKey="blogApp.kusaGroup.body">Body</Translate>
                   </Label>
                   <AvField id="kusa-group-body" type="text" name="body" />
                 </AvGroup>
                 <AvGroup>
-                  <Label id="startedAtLabel" for="startedAt">
-                    Started At
+                  <Label for="user.login">
+                    <Translate contentKey="blogApp.kusaGroup.user">User</Translate>
                   </Label>
-                  <AvInput
-                    id="kusa-group-startedAt"
-                    type="datetime-local"
-                    className="form-control"
-                    name="startedAt"
-                    value={isNew ? null : convertDateTimeFromServer(this.props.kusaGroupEntity.startedAt)}
-                  />
-                </AvGroup>
-                <AvGroup>
-                  <Label for="accountUser.id">Account User</Label>
-                  <AvInput
-                    id="kusa-group-accountUser"
-                    type="select"
-                    className="form-control"
-                    name="accountUser.id"
-                    onChange={this.accountUserUpdate}
-                  >
+                  <AvInput id="kusa-group-user" type="select" className="form-control" name="user.login" onChange={this.userUpdate}>
                     <option value="" key="0" />
-                    {accountUsers
-                      ? accountUsers.map(otherEntity => (
-                          <option value={otherEntity.id} key={otherEntity.id}>
-                            {otherEntity.id}
+                    {users
+                      ? users.map(otherEntity => (
+                          <option value={otherEntity.login} key={otherEntity.id}>
+                            {otherEntity.login}
                           </option>
                         ))
                       : null}
@@ -150,11 +136,14 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
                 </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/kusa-group" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
-                  <span className="d-none d-md-inline">Back</span>
+                  <span className="d-none d-md-inline">
+                    <Translate contentKey="entity.action.back">Back</Translate>
+                  </span>
                 </Button>
                 &nbsp;
                 <Button color="primary" id="save-entity" type="submit" disabled={updating}>
-                  <FontAwesomeIcon icon="save" />&nbsp; Save
+                  <FontAwesomeIcon icon="save" />&nbsp;
+                  <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
               </AvForm>
             )}
@@ -166,14 +155,14 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  accountUsers: storeState.accountUser.entities,
+  users: storeState.userManagement.users,
   kusaGroupEntity: storeState.kusaGroup.entity,
   loading: storeState.kusaGroup.loading,
   updating: storeState.kusaGroup.updating
 });
 
 const mapDispatchToProps = {
-  getAccountUsers,
+  getUsers,
   getEntity,
   updateEntity,
   createEntity,

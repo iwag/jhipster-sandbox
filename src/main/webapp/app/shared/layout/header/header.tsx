@@ -1,7 +1,7 @@
-import './header.scss';
+import './header.css';
 
 import React from 'react';
-
+import { Translate } from 'react-jhipster';
 import { Navbar, Nav, NavbarToggler, NavbarBrand, Collapse } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -9,7 +9,7 @@ import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
 import { Home, Brand } from './header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu } from './menus';
+import { AdminMenu, EntitiesMenu, AccountMenu, LocaleMenu } from './menus';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -17,6 +17,8 @@ export interface IHeaderProps {
   ribbonEnv: string;
   isInProduction: boolean;
   isSwaggerEnabled: boolean;
+  currentLocale: string;
+  onLocaleChange: Function;
 }
 
 export interface IHeaderState {
@@ -28,10 +30,16 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     menuOpen: false
   };
 
+  handleLocaleChange = event => {
+    this.props.onLocaleChange(event.target.value);
+  };
+
   renderDevRibbon = () =>
     this.props.isInProduction === false ? (
       <div className="ribbon dev">
-        <a href="">Development</a>
+        <a href="">
+          <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`} />
+        </a>
       </div>
     ) : null;
 
@@ -40,7 +48,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
   };
 
   render() {
-    const { isAuthenticated, isAdmin, isSwaggerEnabled, isInProduction } = this.props;
+    const { currentLocale, isAuthenticated, isAdmin, isSwaggerEnabled, isInProduction } = this.props;
 
     /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
@@ -56,6 +64,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
               <Home />
               {isAuthenticated && <EntitiesMenu />}
               {isAuthenticated && isAdmin && <AdminMenu showSwagger={isSwaggerEnabled} showDatabase={!isInProduction} />}
+              <LocaleMenu currentLocale={currentLocale} onClick={this.handleLocaleChange} />
               <AccountMenu isAuthenticated={isAuthenticated} />
             </Nav>
           </Collapse>

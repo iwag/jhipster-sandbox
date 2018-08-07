@@ -1,5 +1,5 @@
 import 'react-toastify/dist/ReactToastify.css';
-import './app.scss';
+import './app.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
+import { setLocale } from 'app/shared/reducers/locale';
 import Header from 'app/shared/layout/header/header';
 import Footer from 'app/shared/layout/footer/footer';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
@@ -35,6 +36,8 @@ export class App extends React.Component<IAppProps> {
             <Header
               isAuthenticated={this.props.isAuthenticated}
               isAdmin={this.props.isAdmin}
+              currentLocale={this.props.currentLocale}
+              onLocaleChange={this.props.setLocale}
               ribbonEnv={this.props.ribbonEnv}
               isInProduction={this.props.isInProduction}
               isSwaggerEnabled={this.props.isSwaggerEnabled}
@@ -54,7 +57,8 @@ export class App extends React.Component<IAppProps> {
   }
 }
 
-const mapStateToProps = ({ authentication, applicationProfile }: IRootState) => ({
+const mapStateToProps = ({ authentication, applicationProfile, locale }: IRootState) => ({
+  currentLocale: locale.currentLocale,
   isAuthenticated: authentication.isAuthenticated,
   isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
   ribbonEnv: applicationProfile.ribbonEnv,
@@ -62,7 +66,7 @@ const mapStateToProps = ({ authentication, applicationProfile }: IRootState) => 
   isSwaggerEnabled: applicationProfile.isSwaggerEnabled
 });
 
-const mapDispatchToProps = { getSession, getProfile };
+const mapDispatchToProps = { setLocale, getSession, getProfile };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

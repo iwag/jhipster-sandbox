@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { ICrudGetAllAction, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAllAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -24,20 +24,28 @@ export class KusaGroup extends React.Component<IKusaGroupProps> {
     return (
       <div>
         <h2 id="kusa-group-heading">
-          Kusa Groups
+          <Translate contentKey="blogApp.kusaGroup.home.title">Kusa Groups</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
-            <FontAwesomeIcon icon="plus" />&nbsp; Create new Kusa Group
+            <FontAwesomeIcon icon="plus" />&nbsp;
+            <Translate contentKey="blogApp.kusaGroup.home.createLabel">Create new Kusa Group</Translate>
           </Link>
         </h2>
         <div className="table-responsive">
           <Table responsive>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Body</th>
-                <th>Started At</th>
-                <th>Account User</th>
+                <th>
+                  <Translate contentKey="global.field.id">ID</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="blogApp.kusaGroup.title">Title</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="blogApp.kusaGroup.body">Body</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="blogApp.kusaGroup.user">User</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -51,22 +59,26 @@ export class KusaGroup extends React.Component<IKusaGroupProps> {
                   </td>
                   <td>{kusaGroup.title}</td>
                   <td>{kusaGroup.body}</td>
-                  <td>
-                    <TextFormat type="date" value={kusaGroup.startedAt} format={APP_DATE_FORMAT} />
-                  </td>
-                  <td>
-                    {kusaGroup.accountUser ? <Link to={`accountUser/${kusaGroup.accountUser.id}`}>{kusaGroup.accountUser.id}</Link> : ''}
-                  </td>
+                  <td>{kusaGroup.user ? kusaGroup.user.login : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${kusaGroup.id}`} color="info" size="sm">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        <FontAwesomeIcon icon="eye" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.view">View</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${kusaGroup.id}/edit`} color="primary" size="sm">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${kusaGroup.id}/delete`} color="danger" size="sm">
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
                       </Button>
                     </div>
                   </td>

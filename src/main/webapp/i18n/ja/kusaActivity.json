@@ -1,0 +1,23 @@
+
+{
+    "blogApp": {
+        "kusaActivity" : {
+            "home": {
+                "title": "KusaActivities",
+                "createLabel": "Kusa Activity を追加",
+                "createOrEditLabel": "Kusa Activityを追加または編集"
+            },
+            "created": "A new Kusa Activity is created with identifier {{ param }}",
+            "updated": "A Kusa Activity is updated with identifier {{ param }}",
+            "deleted": "A Kusa Activity is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Kusa Activity {{ id }}を削除してもよろしいですか？"
+            },
+            "detail": {
+                "title": "Kusa Activity"
+            },
+            "doneAt": "Done At",
+            "kusaGroup": "Kusa Group"
+        }
+    }
+}

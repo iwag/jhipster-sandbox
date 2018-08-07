@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Label, Row, Col } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvField, AvFeedback } from 'availity-reactstrap-validation';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { locales } from 'app/config/translation';
 import { IUser } from 'app/shared/model/user.model';
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
@@ -51,7 +52,9 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h1>Create or edit a User</h1>
+            <h1>
+              <Translate contentKey="userManagement.home.createOrEditLabel">Create or edit a User</Translate>
+            </h1>
           </Col>
         </Row>
         <Row className="justify-content-center">
@@ -62,12 +65,16 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
               <AvForm onValidSubmit={this.saveUser}>
                 {user.id ? (
                   <AvGroup>
-                    <Label for="id">ID</Label>
+                    <Label for="id">
+                      <Translate contentKey="global.field.id">ID</Translate>
+                    </Label>
                     <AvField type="text" className="form-control" name="id" required readOnly value={user.id} />
                   </AvGroup>
                 ) : null}
                 <AvGroup>
-                  <Label for="login">Login</Label>
+                  <Label for="login">
+                    <Translate contentKey="userManagement.login">Login</Translate>
+                  </Label>
                   <AvField
                     type="text"
                     className="form-control"
@@ -75,26 +82,28 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                     validate={{
                       required: {
                         value: true,
-                        errorMessage: 'Your username is required.'
+                        errorMessage: translate('register.messages.validate.login.required')
                       },
                       pattern: {
                         value: '^[_.@A-Za-z0-9-]*$',
-                        errorMessage: 'Your username can only contain letters and digits.'
+                        errorMessage: translate('register.messages.validate.login.pattern')
                       },
                       minLength: {
                         value: 1,
-                        errorMessage: 'Your username is required to be at least 1 character.'
+                        errorMessage: translate('register.messages.validate.login.minlength')
                       },
                       maxLength: {
                         value: 50,
-                        errorMessage: 'Your username cannot be longer than 50 characters.'
+                        errorMessage: translate('register.messages.validate.login.maxlength')
                       }
                     }}
                     value={user.login}
                   />
                 </AvGroup>
                 <AvGroup>
-                  <Label for="firstName">First Name</Label>
+                  <Label for="firstName">
+                    <Translate contentKey="userManagement.firstName">First Name</Translate>
+                  </Label>
                   <AvField
                     type="text"
                     className="form-control"
@@ -102,14 +111,16 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                     validate={{
                       maxLength: {
                         value: 50,
-                        errorMessage: 'This field cannot be longer than {{ max }} characters.'
+                        errorMessage: translate('entity.validation.maxlength', { max: 50 })
                       }
                     }}
                     value={user.firstName}
                   />
                 </AvGroup>
                 <AvGroup>
-                  <Label for="lastName">Last Name</Label>
+                  <Label for="lastName">
+                    <Translate contentKey="userManagement.lastName">Last Name</Translate>
+                  </Label>
                   <AvField
                     type="text"
                     className="form-control"
@@ -117,7 +128,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                     validate={{
                       maxLength: {
                         value: 50,
-                        errorMessage: 'This field cannot be longer than {{ max }} characters.'
+                        errorMessage: translate('entity.validation.maxlength', { max: 50 })
                       }
                     }}
                     value={user.lastName}
@@ -127,24 +138,24 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                 <AvGroup>
                   <AvField
                     name="email"
-                    label="Email"
-                    placeholder="Your email"
+                    label={translate('global.form.email')}
+                    placeholder={translate('global.form.email.placeholder')}
                     type="email"
                     validate={{
                       required: {
                         value: true,
-                        errorMessage: 'Your email is required.'
+                        errorMessage: translate('global.messages.validate.email.required')
                       },
                       email: {
-                        errorMessage: 'Your email is invalid.'
+                        errorMessage: translate('global.messages.validate.email.invalid')
                       },
                       minLength: {
                         value: 5,
-                        errorMessage: 'Your email is required to be at least 5 characters.'
+                        errorMessage: translate('global.messages.validate.email.minlength')
                       },
                       maxLength: {
                         value: 254,
-                        errorMessage: 'Your email cannot be longer than 50 characters.'
+                        errorMessage: translate('global.messages.validate.email.maxlength')
                       }
                     }}
                     value={user.email}
@@ -152,11 +163,26 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                 </AvGroup>
                 <AvGroup check>
                   <Label>
-                    <AvInput type="checkbox" name="activated" value={user.activated} /> Activated
+                    <AvInput type="checkbox" name="activated" value={user.activated} />{' '}
+                    <Translate contentKey="userManagement.activated">Activated</Translate>
                   </Label>
                 </AvGroup>
                 <AvGroup>
-                  <Label for="authorities">Language Key</Label>
+                  <Label for="langKey">
+                    <Translate contentKey="userManagement.langKey">Language Key</Translate>
+                  </Label>
+                  <AvField type="select" className="form-control" name="langKey" defaultValue={locales[0]}>
+                    {locales.map(lang => (
+                      <option value={lang} key={lang}>
+                        {lang}
+                      </option>
+                    ))}
+                  </AvField>
+                </AvGroup>
+                <AvGroup>
+                  <Label for="authorities">
+                    <Translate contentKey="userManagement.profiles">Language Key</Translate>
+                  </Label>
                   <AvInput type="select" className="form-control" name="authorities" value={user.authorities} multiple>
                     {roles.map(role => (
                       <option value={role} key={role}>
@@ -167,11 +193,14 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                 </AvGroup>
                 <Button tag={Link} to="/admin/user-management" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
-                  <span className="d-none d-md-inline">Back</span>
+                  <span className="d-none d-md-inline">
+                    <Translate contentKey="entity.action.back">Back</Translate>
+                  </span>
                 </Button>
                 &nbsp;
                 <Button color="primary" type="submit" disabled={isInvalid || updating}>
-                  <FontAwesomeIcon icon="save" />&nbsp; Save
+                  <FontAwesomeIcon icon="save" />&nbsp;
+                  <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
               </AvForm>
             )}

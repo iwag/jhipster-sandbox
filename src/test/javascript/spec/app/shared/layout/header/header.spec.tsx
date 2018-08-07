@@ -1,39 +1,83 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
+import sinon from 'sinon';
+
 import LoadingBar from 'react-redux-loading-bar';
 import { Navbar, Nav } from 'reactstrap';
 
 import { Home, Brand } from 'app/shared/layout/header/header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu } from 'app/shared/layout/header/menus';
+import { AdminMenu, EntitiesMenu, AccountMenu, LocaleMenu } from 'app/shared/layout/header/menus';
 import Header from 'app/shared/layout/header/header';
 
 describe('Header', () => {
   let mountedWrapper;
 
+  const localeSpy = sinon.spy();
+
   const devWrapper = () => {
     if (!mountedWrapper) {
-      mountedWrapper = shallow(<Header isAuthenticated isAdmin ribbonEnv="dev" isInProduction={false} isSwaggerEnabled />);
+      mountedWrapper = shallow(
+        <Header
+          isAuthenticated
+          isAdmin
+          currentLocale="en"
+          onLocaleChange={localeSpy}
+          ribbonEnv="dev"
+          isInProduction={false}
+          isSwaggerEnabled
+        />
+      );
     }
     return mountedWrapper;
   };
   const prodWrapper = () => {
     if (!mountedWrapper) {
-      mountedWrapper = shallow(<Header isAuthenticated isAdmin ribbonEnv="prod" isInProduction isSwaggerEnabled={false} />);
+      mountedWrapper = shallow(
+        <Header
+          isAuthenticated
+          isAdmin
+          currentLocale="en"
+          onLocaleChange={localeSpy}
+          ribbonEnv="prod"
+          isInProduction
+          isSwaggerEnabled={false}
+        />
+      );
     }
     return mountedWrapper;
   };
 
   const userWrapper = () => {
     if (!mountedWrapper) {
-      mountedWrapper = shallow(<Header isAuthenticated isAdmin={false} ribbonEnv="prod" isInProduction isSwaggerEnabled={false} />);
+      mountedWrapper = shallow(
+        <Header
+          isAuthenticated
+          isAdmin={false}
+          currentLocale="en"
+          onLocaleChange={localeSpy}
+          ribbonEnv="prod"
+          isInProduction
+          isSwaggerEnabled={false}
+        />
+      );
     }
     return mountedWrapper;
   };
 
   const guestWrapper = () => {
     if (!mountedWrapper) {
-      mountedWrapper = shallow(<Header isAuthenticated={false} isAdmin={false} ribbonEnv="prod" isInProduction isSwaggerEnabled={false} />);
+      mountedWrapper = shallow(
+        <Header
+          isAuthenticated={false}
+          isAdmin={false}
+          currentLocale="en"
+          onLocaleChange={localeSpy}
+          ribbonEnv="prod"
+          isInProduction
+          isSwaggerEnabled={false}
+        />
+      );
     }
     return mountedWrapper;
   };
@@ -53,6 +97,7 @@ describe('Header', () => {
     expect(nav.find(Home).length).toEqual(1);
     expect(nav.find(AdminMenu).length).toEqual(1);
     expect(nav.find(EntitiesMenu).length).toEqual(1);
+    expect(nav.find(LocaleMenu).length).toEqual(1);
 
     expect(nav.find(AccountMenu).length).toEqual(1);
     const ribbon = devWrapper().find('.ribbon .dev');
@@ -68,6 +113,7 @@ describe('Header', () => {
     expect(nav.find(Home).length).toEqual(1);
     expect(nav.find(AdminMenu).length).toEqual(1);
     expect(nav.find(EntitiesMenu).length).toEqual(1);
+    expect(nav.find(LocaleMenu).length).toEqual(1);
 
     expect(nav.find(AccountMenu).length).toEqual(1);
     const ribbon = prodWrapper().find('.ribbon .dev');

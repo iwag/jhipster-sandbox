@@ -27,9 +27,9 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
-        loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-      },
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader']
+      }
     ]
   },
   devServer: {

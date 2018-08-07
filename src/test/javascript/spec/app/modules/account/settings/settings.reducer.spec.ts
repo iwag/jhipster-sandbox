@@ -61,7 +61,7 @@ describe('Settings reducer tests', () => {
 
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
       const meta = {
-        successMessage: '<strong>Settings saved!</strong>'
+        successMessage: 'translation-not-found[settings.messages.success]'
       };
 
       const expectedActions = [

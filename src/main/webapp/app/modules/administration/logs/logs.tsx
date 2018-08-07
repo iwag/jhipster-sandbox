@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Translate } from 'react-jhipster';
 
 import { getLoggers, changeLogLevel } from '../administration.reducer';
 import { IRootState } from 'app/shared/reducers';
@@ -45,20 +46,32 @@ export class LogsPage extends React.Component<ILogsPageProps, ILogsPageState> {
     const loggers = logs ? logs.loggers : [];
     return (
       <div>
-        <h2 className="logs-page-heading">Logs</h2>
-        <p>There are {loggers.length.toString()} loggers.</p>
+        <h2 className="logs-page-heading">
+          <Translate contentKey="logs.title">Logs</Translate>
+        </h2>
+        <p>
+          <Translate contentKey="logs.nbloggers" interpolate={{ total: loggers.length }}>
+            There are {loggers.length.toString()} loggers.
+          </Translate>
+        </p>
 
-        <span>Filter</span>
+        <span>
+          <Translate contentKey="logs.filter">Filter</Translate>
+        </span>
         <input type="text" value={filter} onChange={this.setFilter} className="form-control" disabled={isFetching} />
 
         <table className="table table-sm table-striped table-bordered">
           <thead>
             <tr title="click to order">
               <th>
-                <span>Name</span>
+                <span>
+                  <Translate contentKey="logs.table.name">Name</Translate>
+                </span>
               </th>
               <th>
-                <span>Level</span>
+                <span>
+                  <Translate contentKey="logs.table.level">Level</Translate>
+                </span>
               </th>
             </tr>
           </thead>

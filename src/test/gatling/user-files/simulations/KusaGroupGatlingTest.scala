@@ -68,7 +68,7 @@ class KusaGroupGatlingTest extends Simulation {
             .exec(http("Create new kusaGroup")
             .post("/api/kusa-groups")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "title":"SAMPLE_TEXT", "body":"SAMPLE_TEXT", "startedAt":"2020-01-01T00:00:00.000Z"}""")).asJSON
+            .body(StringBody("""{"id":null, "title":"SAMPLE_TEXT", "body":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_kusaGroup_url"))).exitHereIfFailed
             .pause(10)

@@ -2,22 +2,27 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
+import { Translate } from 'react-jhipster';
 
 import { IRootState } from 'app/shared/reducers';
 import { activateAction, reset } from './activate.reducer';
 
 const successAlert = (
   <Alert color="success">
-    <strong>Your user account has been activated.</strong> Please
+    <Translate contentKey="activate.messages.success">
+      <strong>Your user account has been activated.</strong> Please
+    </Translate>
     <Link to="/login" className="alert-link">
-      sign in
+      <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
     </Link>.
   </Alert>
 );
 
 const failureAlert = (
   <Alert color="danger">
-    <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
+    <Translate contentKey="activate.messages.error">
+      <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
+    </Translate>
   </Alert>
 );
 
@@ -40,7 +45,9 @@ export class ActivatePage extends React.Component<IActivateProps> {
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h1>Activation</h1>
+            <h1>
+              <Translate contentKey="activate.title">Activation</Translate>
+            </h1>
             {activationSuccess ? successAlert : undefined}
             {activationFailure ? failureAlert : undefined}
           </Col>

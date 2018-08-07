@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const path = require('path');
 
 const utils = require('./utils.js');
@@ -91,6 +92,7 @@ module.exports = options => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: `'${options.env}'`,
+        BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
         VERSION: `'${utils.parseVersion()}'`,
         DEBUG_INFO_ENABLED: options.env === 'development',
         // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
@@ -116,6 +118,15 @@ module.exports = options => ({
       template: './src/main/webapp/index.html',
       chunksSortMode: 'dependency',
       inject: 'body'
+    }),
+    new MergeJsonWebpackPlugin({
+        output: {
+            groupBy: [
+                    { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" },
+                    { pattern: "./src/main/webapp/i18n/ja/*.json", fileName: "./i18n/ja.json" }
+                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
+                ]
+        }
     }),
   ]
 });

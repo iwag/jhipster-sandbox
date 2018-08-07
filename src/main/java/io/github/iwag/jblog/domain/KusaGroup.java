@@ -8,7 +8,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -34,16 +33,13 @@ public class KusaGroup implements Serializable {
     @Column(name = "jhi_body")
     private String body;
 
-    @Column(name = "started_at")
-    private ZonedDateTime startedAt;
-
-    @ManyToOne
-    @JsonIgnoreProperties("groups")
-    private AccountUser accountUser;
-
     @OneToMany(mappedBy = "kusaGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<KusaActivity> actvities = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties("")
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -80,32 +76,6 @@ public class KusaGroup implements Serializable {
         this.body = body;
     }
 
-    public ZonedDateTime getStartedAt() {
-        return startedAt;
-    }
-
-    public KusaGroup startedAt(ZonedDateTime startedAt) {
-        this.startedAt = startedAt;
-        return this;
-    }
-
-    public void setStartedAt(ZonedDateTime startedAt) {
-        this.startedAt = startedAt;
-    }
-
-    public AccountUser getAccountUser() {
-        return accountUser;
-    }
-
-    public KusaGroup accountUser(AccountUser accountUser) {
-        this.accountUser = accountUser;
-        return this;
-    }
-
-    public void setAccountUser(AccountUser accountUser) {
-        this.accountUser = accountUser;
-    }
-
     public Set<KusaActivity> getActvities() {
         return actvities;
     }
@@ -129,6 +99,19 @@ public class KusaGroup implements Serializable {
 
     public void setActvities(Set<KusaActivity> kusaActivities) {
         this.actvities = kusaActivities;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public KusaGroup user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -158,7 +141,6 @@ public class KusaGroup implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", body='" + getBody() + "'" +
-            ", startedAt='" + getStartedAt() + "'" +
             "}";
     }
 }

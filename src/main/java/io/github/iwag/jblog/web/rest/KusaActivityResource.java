@@ -99,7 +99,6 @@ public class KusaActivityResource {
     public ResponseEntity<KusaActivity> getKusaActivity(@PathVariable Long id) {
         log.debug("REST request to get KusaActivity : {}", id);
         Optional<KusaActivity> kusaActivity = kusaActivityRepository.findById(id);
-
         return ResponseUtil.wrapOrNotFound(kusaActivity);
     }
 

@@ -21,14 +21,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.ZoneOffset;
-import java.time.ZoneId;
 import java.util.List;
 
 
-import static io.github.iwag.jblog.web.rest.TestUtil.sameInstant;
 import static io.github.iwag.jblog.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -49,9 +44,6 @@ public class KusaGroupResourceIntTest {
 
     private static final String DEFAULT_BODY = "AAAAAAAAAA";
     private static final String UPDATED_BODY = "BBBBBBBBBB";
-
-    private static final ZonedDateTime DEFAULT_STARTED_AT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_STARTED_AT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
     private KusaGroupRepository kusaGroupRepository;
@@ -93,8 +85,7 @@ public class KusaGroupResourceIntTest {
     public static KusaGroup createEntity(EntityManager em) {
         KusaGroup kusaGroup = new KusaGroup()
             .title(DEFAULT_TITLE)
-            .body(DEFAULT_BODY)
-            .startedAt(DEFAULT_STARTED_AT);
+            .body(DEFAULT_BODY);
         return kusaGroup;
     }
 
@@ -120,7 +111,6 @@ public class KusaGroupResourceIntTest {
         KusaGroup testKusaGroup = kusaGroupList.get(kusaGroupList.size() - 1);
         assertThat(testKusaGroup.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testKusaGroup.getBody()).isEqualTo(DEFAULT_BODY);
-        assertThat(testKusaGroup.getStartedAt()).isEqualTo(DEFAULT_STARTED_AT);
     }
 
     @Test
@@ -154,8 +144,7 @@ public class KusaGroupResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(kusaGroup.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
-            .andExpect(jsonPath("$.[*].body").value(hasItem(DEFAULT_BODY.toString())))
-            .andExpect(jsonPath("$.[*].startedAt").value(hasItem(sameInstant(DEFAULT_STARTED_AT))));
+            .andExpect(jsonPath("$.[*].body").value(hasItem(DEFAULT_BODY.toString())));
     }
     
 
@@ -171,8 +160,7 @@ public class KusaGroupResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(kusaGroup.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
-            .andExpect(jsonPath("$.body").value(DEFAULT_BODY.toString()))
-            .andExpect(jsonPath("$.startedAt").value(sameInstant(DEFAULT_STARTED_AT)));
+            .andExpect(jsonPath("$.body").value(DEFAULT_BODY.toString()));
     }
     @Test
     @Transactional
@@ -196,8 +184,7 @@ public class KusaGroupResourceIntTest {
         em.detach(updatedKusaGroup);
         updatedKusaGroup
             .title(UPDATED_TITLE)
-            .body(UPDATED_BODY)
-            .startedAt(UPDATED_STARTED_AT);
+            .body(UPDATED_BODY);
 
         restKusaGroupMockMvc.perform(put("/api/kusa-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -210,7 +197,6 @@ public class KusaGroupResourceIntTest {
         KusaGroup testKusaGroup = kusaGroupList.get(kusaGroupList.size() - 1);
         assertThat(testKusaGroup.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testKusaGroup.getBody()).isEqualTo(UPDATED_BODY);
-        assertThat(testKusaGroup.getStartedAt()).isEqualTo(UPDATED_STARTED_AT);
     }
 
     @Test

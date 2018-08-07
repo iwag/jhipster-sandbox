@@ -3,8 +3,11 @@ package io.github.iwag.jblog.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.github.iwag.jblog.domain.KusaActivity;
 import io.github.iwag.jblog.domain.KusaGroup;
+import io.github.iwag.jblog.domain.User;
 import io.github.iwag.jblog.repository.KusaActivityRepository;
 import io.github.iwag.jblog.repository.KusaGroupRepository;
+import io.github.iwag.jblog.repository.UserRepository;
+import io.github.iwag.jblog.security.SecurityUtils;
 import io.github.iwag.jblog.web.rest.errors.BadRequestAlertException;
 import io.github.iwag.jblog.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -33,10 +36,12 @@ public class KusaGroupResource {
 
     private final KusaGroupRepository kusaGroupRepository;
     private final KusaActivityRepository kusaActivityRepository;
+    private final UserRepository userRepository;
 
-    public KusaGroupResource(KusaGroupRepository kusaGroupRepository, KusaActivityRepository kusaActivityRepository) {
+    public KusaGroupResource(KusaGroupRepository kusaGroupRepository, KusaActivityRepository kusaActivityRepository, UserRepository userRepository) {
         this.kusaGroupRepository = kusaGroupRepository;
         this.kusaActivityRepository = kusaActivityRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -53,6 +58,14 @@ public class KusaGroupResource {
         if (kusaGroup.getId() != null) {
             throw new BadRequestAlertException("A new kusaGroup cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        SecurityUtils.getCurrentUserLogin().ifPresent(s -> {
+            Optional<User> user = userRepository.findOneByLogin(s);
+            //log.debug("getUser=" + kusaGroup.getUser().toString());
+            user.ifPresent(u -> kusaGroup.setUser(u));
+            userRepository.save(kusaGroup.getUser());
+        });
+
         KusaGroup result = kusaGroupRepository.save(kusaGroup);
         return ResponseEntity.created(new URI("/api/kusa-groups/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

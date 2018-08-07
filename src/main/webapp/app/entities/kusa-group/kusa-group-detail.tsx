@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { ICrudGetAction, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -25,31 +25,37 @@ export class KusaGroupDetail extends React.Component<IKusaGroupDetailProps> {
       <Row>
         <Col md="8">
           <h2>
-            KusaGroup [<b>{kusaGroupEntity.id}</b>]
+            <Translate contentKey="blogApp.kusaGroup.detail.title">KusaGroup</Translate> [<b>{kusaGroupEntity.id}</b>]
           </h2>
           <dl className="jh-entity-details">
             <dt>
-              <span id="title">Title</span>
+              <span id="title">
+                <Translate contentKey="blogApp.kusaGroup.title">Title</Translate>
+              </span>
             </dt>
             <dd>{kusaGroupEntity.title}</dd>
             <dt>
-              <span id="body">Body</span>
+              <span id="body">
+                <Translate contentKey="blogApp.kusaGroup.body">Body</Translate>
+              </span>
             </dt>
             <dd>{kusaGroupEntity.body}</dd>
             <dt>
-              <span id="startedAt">Started At</span>
+              <Translate contentKey="blogApp.kusaGroup.user">User</Translate>
             </dt>
-            <dd>
-              <TextFormat value={kusaGroupEntity.startedAt} type="date" format={APP_DATE_FORMAT} />
-            </dd>
-            <dt>Account User</dt>
-            <dd>{kusaGroupEntity.accountUser ? kusaGroupEntity.accountUser.id : ''}</dd>
+            <dd>{kusaGroupEntity.user ? kusaGroupEntity.user.login : ''}</dd>
           </dl>
           <Button tag={Link} to="/entity/kusa-group" replace color="info">
-            <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
+            <FontAwesomeIcon icon="arrow-left" />{' '}
+            <span className="d-none d-md-inline">
+              <Translate contentKey="entity.action.back">Back</Translate>
+            </span>
           </Button>&nbsp;
           <Button tag={Link} to={`/entity/kusa-group/${kusaGroupEntity.id}/edit`} replace color="primary">
-            <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+            <FontAwesomeIcon icon="pencil-alt" />{' '}
+            <span className="d-none d-md-inline">
+              <Translate contentKey="entity.action.edit">Edit</Translate>
+            </span>
           </Button>
         </Col>
       </Row>
