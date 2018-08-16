@@ -68,6 +68,11 @@ class LoginModal extends React.Component<ILoginModalProps> {
               </Link>
             </Alert>
             <Alert color="warning">
+              <a href="/getToken" rel="noopener noreferrer">
+                <Translate contentKey="home.link.bugtracker">TWITTER LOGINr</Translate>
+              </a>
+            </Alert>
+            <Alert color="warning">
               <span>
                 <Translate contentKey="global.messages.info.register.noaccount">You don't have an account yet?</Translate>
               </span>{' '}
