@@ -19,6 +19,12 @@ const accountMenuItems = (
     <DropdownItem id="login-item" tag="a" href={getLoginUrl()}>
       <FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate>
     </DropdownItem>
+    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}>
+      <FontAwesomeIcon icon="sign-in-alt" />
+      <a href="/getToken" rel="noopener noreferrer">
+        <Translate contentKey="home.link.bugtracker">TWITTER LOGINr</Translate>
+      </a>
+    </DropdownItem>
   </>
 );
 
