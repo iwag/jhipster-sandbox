@@ -6,10 +6,6 @@ import { SERVER_API_URL } from 'app/config/constants';
 const TIMEOUT = 1000000; // 10000
 const setupAxiosInterceptors = onUnauthenticated => {
   const onRequestSuccess = config => {
-    const token = Storage.local.get('jhi-authenticationToken') || Storage.session.get('jhi-authenticationToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
     config.timeout = TIMEOUT;
     config.url = `${SERVER_API_URL}${config.url}`;
     return config;

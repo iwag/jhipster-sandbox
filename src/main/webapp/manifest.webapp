@@ -1,6 +1,6 @@
 {
-  "name": "blog",
-  "short_name": "blog",
+  "name": "jblog",
+  "short_name": "jblog",
   "icons": [
       {
           "src": "./content/images/hipster192.png",

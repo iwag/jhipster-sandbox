@@ -72,7 +72,7 @@ export default () => next => action => {
                   const fieldError = fieldErrors[i];
                   // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                   const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                  const fieldName = translate(`blogApp.${fieldError.objectName}.${convertedField}`);
+                  const fieldName = translate(`jblogApp.${fieldError.objectName}.${convertedField}`);
                   addErrorAlert(`Error on field "${fieldName}"`, `error.${fieldError.message}`, { fieldName });
                 }
               } else if (data !== '' && data.message) {
