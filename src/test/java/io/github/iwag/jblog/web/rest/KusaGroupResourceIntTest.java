@@ -3,7 +3,9 @@ package io.github.iwag.jblog.web.rest;
 import io.github.iwag.jblog.BlogApp;
 
 import io.github.iwag.jblog.domain.KusaGroup;
+import io.github.iwag.jblog.repository.KusaActivityRepository;
 import io.github.iwag.jblog.repository.KusaGroupRepository;
+import io.github.iwag.jblog.repository.UserRepository;
 import io.github.iwag.jblog.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -48,6 +50,11 @@ public class KusaGroupResourceIntTest {
     @Autowired
     private KusaGroupRepository kusaGroupRepository;
 
+    @Autowired
+    private KusaActivityRepository kusaActivityRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -68,7 +75,7 @@ public class KusaGroupResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final KusaGroupResource kusaGroupResource = new KusaGroupResource(kusaGroupRepository);
+        final KusaGroupResource kusaGroupResource = new KusaGroupResource(kusaGroupRepository, kusaActivityRepository, userRepository);
         this.restKusaGroupMockMvc = MockMvcBuilders.standaloneSetup(kusaGroupResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -146,7 +153,7 @@ public class KusaGroupResourceIntTest {
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
             .andExpect(jsonPath("$.[*].body").value(hasItem(DEFAULT_BODY.toString())));
     }
-    
+
 
     @Test
     @Transactional
