@@ -16,6 +16,8 @@ import twitter4j.auth.RequestToken;
 
 @Controller
 public class TwitterCallbackController {
+    private final Logger log = LoggerFactory.getLogger(TwitterTokenController.class);
+
     @RequestMapping("/twitterCallback")
     public String twitterCallback(@RequestParam(value="oauth_verifier", required=false) String oauthVerifier,
                                   @RequestParam(value="denied", required=false) String denied,
@@ -40,9 +42,12 @@ public class TwitterCallbackController {
             //store the user name so we can display it on the web page
             model.addAttribute("username", twitter.getScreenName());
 
+            log.info("twitter=" + twitter.getScreenName() + "," + twitter.getId() + ":", twitter.toString());
+
+
             return "redirect:/";
         } catch (Exception e) {
-            // LOGGER.error("Problem getting token!",e);
+            log.error("Problem getting token!",e);
             return "redirect:/";
         }
     }
