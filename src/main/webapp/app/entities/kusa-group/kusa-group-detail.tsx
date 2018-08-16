@@ -24,26 +24,26 @@ export class KusaGroupDetail extends React.Component<IKusaGroupDetailProps> {
     const WEEK_OF_TABLE = 44;
     const DAY_OF_WEEK = 7;
 
-    let tables = [];
+    const tables = [];
     for (let i = 0; i < WEEK_OF_TABLE; i++) {
       tables[i] = Array(DAY_OF_WEEK).fill({});
     }
 
-    let today = new Date();
+    const today = new Date();
     today.setDate(today.getDate() + ((6 - today.getDay()) % 7));
 
-    console.log(kusaGroupEntity.actvities);
     for (let i = WEEK_OF_TABLE - 1; i >= 0; i--) {
       for (let j = DAY_OF_WEEK - 1; j >= 0; j--) {
         today.setDate(today.getDate() - 1);
-        let d = today.toISOString().slice(0, 10);
-        let count =
+        const d = today.toISOString().slice(0, 10);
+        const c = 0;
+        /*
           kusaGroupEntity.actvities &&
           kusaGroupEntity.actvities.find((v, i) => v.doneAt && new Date(v.doneAt.toString()).toISOString().slice(0, 10) == d)
             ? 1
-            : 0;
+            : 0;*/
         tables[i][j] = {
-          count: count,
+          count: c,
           date: d
         };
       }
