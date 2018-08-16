@@ -2,7 +2,6 @@ package io.github.iwag.jblog;
 
 import io.github.iwag.jblog.config.ApplicationProperties;
 import io.github.iwag.jblog.config.DefaultProfileUtil;
-
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;

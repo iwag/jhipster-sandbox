@@ -13,7 +13,7 @@ public class LoginVM {
     private String username;
 
     @NotNull
-    @Size(min = ManagedUserVM.PASSWORD_MIN_LENGTH, max = ManagedUserVM.PASSWORD_MAX_LENGTH)
+//    @Size(min = ManagedUserVM.PASSWORD_MIN_LENGTH, max = ManagedUserVM.PASSWORD_MAX_LENGTH)
     private String password;
 
     private Boolean rememberMe;
