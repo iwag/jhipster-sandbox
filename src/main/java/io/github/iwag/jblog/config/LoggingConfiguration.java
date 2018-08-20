@@ -3,6 +3,9 @@ package io.github.iwag.jblog.config;
 import java.net.InetSocketAddress;
 import java.util.Iterator;
 
+import ch.qos.logback.more.appenders.DataFluentAppender;
+import ch.qos.logback.more.appenders.FluencyLogbackAppender;
+import ch.qos.logback.more.appenders.FluentLogbackAppender;
 import io.github.jhipster.config.JHipsterProperties;
 
 import ch.qos.logback.classic.AsyncAppender;
@@ -29,6 +32,10 @@ public class LoggingConfiguration {
     private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
 
     private static final String ASYNC_LOGSTASH_APPENDER_NAME = "ASYNC_LOGSTASH";
+
+    private static final String FLUENTD_APPENDER_NAME = "FLUENTD";
+
+    private static final String ASYNC_FLUENTD_APPENDER_NAME = "ASYNC_FLUENTD";
 
     private final Logger log = LoggerFactory.getLogger(LoggingConfiguration.class);
 
@@ -58,6 +65,11 @@ public class LoggingConfiguration {
         LogbackLoggerContextListener loggerContextListener = new LogbackLoggerContextListener();
         loggerContextListener.setContext(context);
         context.addListener(loggerContextListener);
+
+        FluentdLoggerContextListener loggerContextListener2 = new FluentdLoggerContextListener();
+        loggerContextListener2.setContext(context);
+        context.addListener(loggerContextListener2);
+
     }
 
     private void addLogstashAppender(LoggerContext context) {
@@ -92,6 +104,26 @@ public class LoggingConfiguration {
         asyncLogstashAppender.start();
 
         context.getLogger("ROOT").addAppender(asyncLogstashAppender);
+    }
+
+    private void addFluentdAppender(LoggerContext context) {
+
+        FluencyLogbackAppender flutnedAppender = new FluencyLogbackAppender();
+        flutnedAppender.setName(FLUENTD_APPENDER_NAME);
+        flutnedAppender.setContext(context);
+
+        flutnedAppender.setRemoteHost(jHipsterProperties.getLogging().getLogstash().getHost());
+        flutnedAppender.setPort(jHipsterProperties.getLogging().getLogstash().getPort());
+
+        flutnedAppender.start();
+
+        AsyncAppender asyncLogstashAppender = new AsyncAppender();
+        asyncLogstashAppender.setContext(context);
+        asyncLogstashAppender.setName(ASYNC_FLUENTD_APPENDER_NAME);
+        asyncLogstashAppender.setQueueSize(jHipsterProperties.getLogging().getLogstash().getQueueSize());
+        asyncLogstashAppender.addAppender(flutnedAppender);
+        asyncLogstashAppender.start();
+
     }
 
     // Configure a log filter to remove "metrics" logs from all appenders except the "LOGSTASH" appender
@@ -140,6 +172,34 @@ public class LoggingConfiguration {
         @Override
         public void onReset(LoggerContext context) {
             addLogstashAppender(context);
+        }
+
+        @Override
+        public void onStop(LoggerContext context) {
+            // Nothing to do.
+        }
+
+        @Override
+        public void onLevelChange(ch.qos.logback.classic.Logger logger, Level level) {
+            // Nothing to do.
+        }
+    }
+
+    private class FluentdLoggerContextListener  extends ContextAwareBase implements LoggerContextListener {
+
+        @Override
+        public boolean isResetResistant() {
+            return true;
+        }
+
+        @Override
+        public void onStart(LoggerContext context) {
+            addFluentdAppender(context);
+        }
+
+        @Override
+        public void onReset(LoggerContext context) {
+            addFluentdAppender(context);
         }
 
         @Override
