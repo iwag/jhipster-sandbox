@@ -7,6 +7,7 @@ import io.github.iwag.jblog.web.rest.errors.InternalServerErrorException;
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,8 +56,12 @@ public class AccountResource {
     @SuppressWarnings("unchecked")
     public UserDTO getAccount(Principal principal) {
         if (principal != null) {
+            log.warn("getAccount:" + principal.toString());
             if (principal instanceof OAuth2Authentication) {
                 return userService.getUserFromAuthentication((OAuth2Authentication) principal);
+            } else if (principal instanceof UsernamePasswordAuthenticationToken) {
+                UserDTO user = userService.getUserFromAuthentication((UsernamePasswordAuthenticationToken)principal);
+                return user;
             } else {
                 // Allow Spring Security Test to be used to mock users in the database
                 return userService.getUserWithAuthorities()

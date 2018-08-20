@@ -5,6 +5,7 @@ import io.github.iwag.jblog.domain.User;
 import io.github.iwag.jblog.repository.AuthorityRepository;
 import io.github.iwag.jblog.config.Constants;
 import io.github.iwag.jblog.repository.UserRepository;
+import io.github.iwag.jblog.security.AuthoritiesConstants;
 import io.github.iwag.jblog.security.SecurityUtils;
 import io.github.iwag.jblog.service.dto.UserDTO;
 
@@ -169,7 +170,37 @@ public class UserService {
         return new UserDTO(syncUserWithIdP(details, user));
     }
 
-    private User syncUserWithIdP(Map<String, Object> details, User user) {
+    public UserDTO getUserFromAuthentication( Map<String, Object> details) {
+
+        User user = getUser(details);
+
+        List<String> authorities = Arrays.asList(AuthoritiesConstants.USER);
+        Set<Authority> userAuthorities = extractAuthorities(authorities);
+        user.setAuthorities(userAuthorities);
+
+        // convert Authorities to GrantedAuthorities
+        Set<GrantedAuthority> grantedAuthorities = userAuthorities.stream()
+            .map(Authority::getName)
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toSet());
+
+        UsernamePasswordAuthenticationToken authenticationToken = getToken(details, user, grantedAuthorities);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        return new UserDTO(syncUserWithIdP(details, user));
+    }
+
+    public UserDTO getUserFromAuthentication(UsernamePasswordAuthenticationToken authentication) {
+        Object oauth2AuthenticationDetails = authentication.getDetails(); // should be an OAuth2AuthenticationDetails
+
+        User user = getUser((Map<String, Object>) oauth2AuthenticationDetails);
+        List<String> authorities = Arrays.asList(AuthoritiesConstants.USER);
+        Set<Authority> userAuthorities = extractAuthorities(authorities);
+        user.setAuthorities(userAuthorities);
+
+        return new UserDTO(syncUserWithIdP((Map<String, Object>) oauth2AuthenticationDetails, user));
+    }
+
+    public User syncUserWithIdP(Map<String, Object> details, User user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
         Collection<String> dbAuthorities = getAuthorities();
         Collection<String> userAuthorities =
@@ -287,4 +318,5 @@ public class UserService {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
     }
+
 }
