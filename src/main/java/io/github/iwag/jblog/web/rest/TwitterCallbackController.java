@@ -36,7 +36,7 @@ public class TwitterCallbackController {
     @Autowired
     UserService userService;
 
-    private final Logger log = LoggerFactory.getLogger(TwitterTokenController.class);
+    private final Logger log = LoggerFactory.getLogger(TwitterCallbackController.class);
 
     @RequestMapping("/twitterCallback")
     public String twitterCallback(@RequestParam(value="oauth_verifier", required=false) String oauthVerifier,
