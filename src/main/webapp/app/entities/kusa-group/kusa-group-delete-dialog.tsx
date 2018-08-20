@@ -34,7 +34,7 @@ export class KusaGroupDeleteDialog extends React.Component<IKusaGroupDeleteDialo
           <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
         </ModalHeader>
         <ModalBody>
-          <Translate contentKey="blogApp.kusaGroup.delete.question" interpolate={{ id: kusaGroupEntity.id }}>
+          <Translate contentKey="jblogApp.kusaGroup.delete.question" interpolate={{ id: kusaGroupEntity.id }}>
             Are you sure you want to delete this KusaGroup?
           </Translate>
         </ModalBody>

@@ -7,6 +7,9 @@ import { Translate, translate } from 'react-jhipster';
 
 const adminMenuItems = (
   <>
+    <DropdownItem tag={Link} to="/admin/user-management">
+      <FontAwesomeIcon icon="user" /> <Translate contentKey="global.menu.admin.userManagement">User management</Translate>
+    </DropdownItem>
     <DropdownItem tag={Link} to="/admin/metrics">
       <FontAwesomeIcon icon="tachometer-alt" /> <Translate contentKey="global.menu.admin.metrics">Metrics</Translate>
     </DropdownItem>

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
-import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -90,8 +90,8 @@ export class KusaActivityUpdate extends React.Component<IKusaActivityUpdateProps
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h2 id="blogApp.kusaActivity.home.createOrEditLabel">
-              <Translate contentKey="blogApp.kusaActivity.home.createOrEditLabel">Create or edit a KusaActivity</Translate>
+            <h2 id="jblogApp.kusaActivity.home.createOrEditLabel">
+              <Translate contentKey="jblogApp.kusaActivity.home.createOrEditLabel">Create or edit a KusaActivity</Translate>
             </h2>
           </Col>
         </Row>
@@ -111,7 +111,7 @@ export class KusaActivityUpdate extends React.Component<IKusaActivityUpdateProps
                 ) : null}
                 <AvGroup>
                   <Label id="doneAtLabel" for="doneAt">
-                    <Translate contentKey="blogApp.kusaActivity.doneAt">Done At</Translate>
+                    <Translate contentKey="jblogApp.kusaActivity.doneAt">Done At</Translate>
                   </Label>
                   <AvInput
                     id="kusa-activity-doneAt"
@@ -122,8 +122,14 @@ export class KusaActivityUpdate extends React.Component<IKusaActivityUpdateProps
                   />
                 </AvGroup>
                 <AvGroup>
+                  <Label id="countLabel" for="count">
+                    <Translate contentKey="jblogApp.kusaActivity.count">Count</Translate>
+                  </Label>
+                  <AvField id="kusa-activity-count" type="number" className="form-control" name="count" />
+                </AvGroup>
+                <AvGroup>
                   <Label for="kusaGroup.id">
-                    <Translate contentKey="blogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
+                    <Translate contentKey="jblogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
                   </Label>
                   <AvInput
                     id="kusa-activity-kusaGroup"

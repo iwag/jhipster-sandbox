@@ -25,19 +25,25 @@ export class KusaActivityDetail extends React.Component<IKusaActivityDetailProps
       <Row>
         <Col md="8">
           <h2>
-            <Translate contentKey="blogApp.kusaActivity.detail.title">KusaActivity</Translate> [<b>{kusaActivityEntity.id}</b>]
+            <Translate contentKey="jblogApp.kusaActivity.detail.title">KusaActivity</Translate> [<b>{kusaActivityEntity.id}</b>]
           </h2>
           <dl className="jh-entity-details">
             <dt>
               <span id="doneAt">
-                <Translate contentKey="blogApp.kusaActivity.doneAt">Done At</Translate>
+                <Translate contentKey="jblogApp.kusaActivity.doneAt">Done At</Translate>
               </span>
             </dt>
             <dd>
               <TextFormat value={kusaActivityEntity.doneAt} type="date" format={APP_DATE_FORMAT} />
             </dd>
             <dt>
-              <Translate contentKey="blogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
+              <span id="count">
+                <Translate contentKey="jblogApp.kusaActivity.count">Count</Translate>
+              </span>
+            </dt>
+            <dd>{kusaActivityEntity.count}</dd>
+            <dt>
+              <Translate contentKey="jblogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
             </dt>
             <dd>{kusaActivityEntity.kusaGroup ? kusaActivityEntity.kusaGroup.id : ''}</dd>
           </dl>

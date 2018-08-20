@@ -1,11 +1,11 @@
 version: '2'
 services:
-    blog-postgresql:
+    jblog-postgresql:
         image: postgres:10.4
         # volumes:
-        #     - ~/volumes/jhipster/blog/postgresql/:/var/lib/postgresql/data/
+        #     - ~/volumes/jhipster/jblog/postgresql/:/var/lib/postgresql/data/
         environment:
-            - POSTGRES_USER=blog
+            - POSTGRES_USER=jblog
             - POSTGRES_PASSWORD=
         ports:
             - 5432:5432

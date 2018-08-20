@@ -47,6 +47,9 @@ public class KusaActivityResourceIntTest {
     private static final ZonedDateTime DEFAULT_DONE_AT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_DONE_AT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
+    private static final Integer DEFAULT_COUNT = 1;
+    private static final Integer UPDATED_COUNT = 2;
+
     @Autowired
     private KusaActivityRepository kusaActivityRepository;
 
@@ -86,7 +89,8 @@ public class KusaActivityResourceIntTest {
      */
     public static KusaActivity createEntity(EntityManager em) {
         KusaActivity kusaActivity = new KusaActivity()
-            .doneAt(DEFAULT_DONE_AT);
+            .doneAt(DEFAULT_DONE_AT)
+            .count(DEFAULT_COUNT);
         return kusaActivity;
     }
 
@@ -111,6 +115,7 @@ public class KusaActivityResourceIntTest {
         assertThat(kusaActivityList).hasSize(databaseSizeBeforeCreate + 1);
         KusaActivity testKusaActivity = kusaActivityList.get(kusaActivityList.size() - 1);
         assertThat(testKusaActivity.getDoneAt()).isEqualTo(DEFAULT_DONE_AT);
+        assertThat(testKusaActivity.getCount()).isEqualTo(DEFAULT_COUNT);
     }
 
     @Test
@@ -143,9 +148,10 @@ public class KusaActivityResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(kusaActivity.getId().intValue())))
-            .andExpect(jsonPath("$.[*].doneAt").value(hasItem(sameInstant(DEFAULT_DONE_AT))));
+            .andExpect(jsonPath("$.[*].doneAt").value(hasItem(sameInstant(DEFAULT_DONE_AT))))
+            .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)));
     }
-    
+
 
     @Test
     @Transactional
@@ -158,7 +164,8 @@ public class KusaActivityResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(kusaActivity.getId().intValue()))
-            .andExpect(jsonPath("$.doneAt").value(sameInstant(DEFAULT_DONE_AT)));
+            .andExpect(jsonPath("$.doneAt").value(sameInstant(DEFAULT_DONE_AT)))
+            .andExpect(jsonPath("$.count").value(DEFAULT_COUNT));
     }
     @Test
     @Transactional
@@ -181,7 +188,8 @@ public class KusaActivityResourceIntTest {
         // Disconnect from session so that the updates on updatedKusaActivity are not directly saved in db
         em.detach(updatedKusaActivity);
         updatedKusaActivity
-            .doneAt(UPDATED_DONE_AT);
+            .doneAt(UPDATED_DONE_AT)
+            .count(UPDATED_COUNT);
 
         restKusaActivityMockMvc.perform(put("/api/kusa-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -193,6 +201,7 @@ public class KusaActivityResourceIntTest {
         assertThat(kusaActivityList).hasSize(databaseSizeBeforeUpdate);
         KusaActivity testKusaActivity = kusaActivityList.get(kusaActivityList.size() - 1);
         assertThat(testKusaActivity.getDoneAt()).isEqualTo(UPDATED_DONE_AT);
+        assertThat(testKusaActivity.getCount()).isEqualTo(UPDATED_COUNT);
     }
 
     @Test

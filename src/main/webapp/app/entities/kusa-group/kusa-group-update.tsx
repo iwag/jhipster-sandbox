@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IUser } from 'app/shared/model/user.model';
-import { getUsers } from 'app/shared/reducers/user-management';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './kusa-group.reducer';
 import { IKusaGroup } from 'app/shared/model/kusa-group.model';
 // tslint:disable-next-line:no-unused-variable
@@ -88,8 +88,8 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h2 id="blogApp.kusaGroup.home.createOrEditLabel">
-              <Translate contentKey="blogApp.kusaGroup.home.createOrEditLabel">Create or edit a KusaGroup</Translate>
+            <h2 id="jblogApp.kusaGroup.home.createOrEditLabel">
+              <Translate contentKey="jblogApp.kusaGroup.home.createOrEditLabel">Create or edit a KusaGroup</Translate>
             </h2>
           </Col>
         </Row>
@@ -109,19 +109,19 @@ export class KusaGroupUpdate extends React.Component<IKusaGroupUpdateProps, IKus
                 ) : null}
                 <AvGroup>
                   <Label id="titleLabel" for="title">
-                    <Translate contentKey="blogApp.kusaGroup.title">Title</Translate>
+                    <Translate contentKey="jblogApp.kusaGroup.title">Title</Translate>
                   </Label>
                   <AvField id="kusa-group-title" type="text" name="title" />
                 </AvGroup>
                 <AvGroup>
                   <Label id="bodyLabel" for="body">
-                    <Translate contentKey="blogApp.kusaGroup.body">Body</Translate>
+                    <Translate contentKey="jblogApp.kusaGroup.body">Body</Translate>
                   </Label>
                   <AvField id="kusa-group-body" type="text" name="body" />
                 </AvGroup>
                 <AvGroup>
                   <Label for="user.login">
-                    <Translate contentKey="blogApp.kusaGroup.user">User</Translate>
+                    <Translate contentKey="jblogApp.kusaGroup.user">User</Translate>
                   </Label>
                   <AvInput id="kusa-group-user" type="select" className="form-control" name="user.login" onChange={this.userUpdate}>
                     <option value="" key="0" />

@@ -53,23 +53,23 @@ export class KusaGroupDetail extends React.Component<IKusaGroupDetailProps> {
       <Row>
         <Col md="8">
           <h2>
-            <Translate contentKey="blogApp.kusaGroup.detail.title">KusaGroup</Translate> [<b>{kusaGroupEntity.id}</b>]
+            <Translate contentKey="jblogApp.kusaGroup.detail.title">KusaGroup</Translate> [<b>{kusaGroupEntity.id}</b>]
           </h2>
           <dl className="jh-entity-details">
             <dt>
               <span id="title">
-                <Translate contentKey="blogApp.kusaGroup.title">Title</Translate>
+                <Translate contentKey="jblogApp.kusaGroup.title">Title</Translate>
               </span>
             </dt>
             <dd>{kusaGroupEntity.title}</dd>
             <dt>
               <span id="body">
-                <Translate contentKey="blogApp.kusaGroup.body">Body</Translate>
+                <Translate contentKey="jblogApp.kusaGroup.body">Body</Translate>
               </span>
             </dt>
             <dd>{kusaGroupEntity.body}</dd>
             <dt>
-              <Translate contentKey="blogApp.kusaGroup.user">User</Translate>
+              <Translate contentKey="jblogApp.kusaGroup.user">User</Translate>
             </dt>
             <dd>{kusaGroupEntity.user ? kusaGroupEntity.user.login : ''}</dd>
             <svg width="1200" height="240">
@@ -125,16 +125,14 @@ export class KusaGroupDetail extends React.Component<IKusaGroupDetailProps> {
                 Jul
               </text>
             </svg>
-            <dt>
-              {kusaGroupEntity.actvities
-                ? kusaGroupEntity.actvities.map((v, i) => (
-                    <tr>
-                      <td>{v.id}</td>
-                      <td>{v.doneAt}</td>
-                    </tr>
-                  ))
-                : ''}
-            </dt>
+            {kusaGroupEntity.actvities
+              ? kusaGroupEntity.actvities.map((v, i) => (
+                  <tr>
+                    <td>{v.id}</td>
+                    <td>{v.doneAt}</td>
+                  </tr>
+                ))
+              : ''}
           </dl>
           <Button tag={Link} to="/entity/kusa-group" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}

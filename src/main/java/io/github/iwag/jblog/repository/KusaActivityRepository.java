@@ -14,6 +14,8 @@ import java.util.List;
 @Repository
 public interface KusaActivityRepository extends JpaRepository<KusaActivity, Long> {
 
+
     @Query("select t from KusaActivity t where t.kusaGroup.id = ?1")
     List<KusaActivity> findAllByGroupId(Long id);
+
 }

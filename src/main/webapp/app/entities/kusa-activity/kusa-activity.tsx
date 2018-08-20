@@ -24,10 +24,10 @@ export class KusaActivity extends React.Component<IKusaActivityProps> {
     return (
       <div>
         <h2 id="kusa-activity-heading">
-          <Translate contentKey="blogApp.kusaActivity.home.title">Kusa Activities</Translate>
+          <Translate contentKey="jblogApp.kusaActivity.home.title">Kusa Activities</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
             <FontAwesomeIcon icon="plus" />&nbsp;
-            <Translate contentKey="blogApp.kusaActivity.home.createLabel">Create new Kusa Activity</Translate>
+            <Translate contentKey="jblogApp.kusaActivity.home.createLabel">Create new Kusa Activity</Translate>
           </Link>
         </h2>
         <div className="table-responsive">
@@ -38,10 +38,13 @@ export class KusaActivity extends React.Component<IKusaActivityProps> {
                   <Translate contentKey="global.field.id">ID</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="blogApp.kusaActivity.doneAt">Done At</Translate>
+                  <Translate contentKey="jblogApp.kusaActivity.doneAt">Done At</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="blogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
+                  <Translate contentKey="jblogApp.kusaActivity.count">Count</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="jblogApp.kusaActivity.kusaGroup">Kusa Group</Translate>
                 </th>
                 <th />
               </tr>
@@ -57,6 +60,7 @@ export class KusaActivity extends React.Component<IKusaActivityProps> {
                   <td>
                     <TextFormat type="date" value={kusaActivity.doneAt} format={APP_DATE_FORMAT} />
                   </td>
+                  <td>{kusaActivity.count}</td>
                   <td>
                     {kusaActivity.kusaGroup ? <Link to={`kusaGroup/${kusaActivity.kusaGroup.id}`}>{kusaActivity.kusaGroup.id}</Link> : ''}
                   </td>

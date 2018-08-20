@@ -1,17 +1,17 @@
 {
   "generator-jhipster": {
     "promptValues": {
-      "packageName": "io.github.iwag.jblog"
+      "packageName": "io.github.iwag.blog",
+      "nativeLanguage": "en"
     },
     "jhipsterVersion": "5.1.0",
     "applicationType": "monolith",
-    "baseName": "blog",
-    "packageName": "io.github.iwag.jblog",
-    "packageFolder": "io/github/iwag/jblog",
+    "baseName": "jblog",
+    "packageName": "io.github.iwag.blog",
+    "packageFolder": "io/github/iwag/blog",
     "serverPort": "8080",
-    "authenticationType": "oauth2",
-    "cacheProvider": "ehcache",
-    "enableHibernateCache": true,
+    "authenticationType": "session",
+    "cacheProvider": "no",
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
@@ -20,20 +20,18 @@
     "messageBroker": false,
     "serviceDiscoveryType": false,
     "buildTool": "gradle",
-    "enableSwaggerCodegen": true,
-    "jwtSecretKey": "b796ca2c990fae176803efe0d09daf433f393ed0",
+    "enableSwaggerCodegen": false,
+    "rememberMeKey": "922240db26203a98d688677a3849163fd6a6bb02",
     "clientFramework": "react",
-    "useSass": false,
+    "useSass": true,
     "clientPackageManager": "yarn",
-    "testFrameworks": [
-      "gatling"
-    ],
+    "testFrameworks": [],
     "jhiPrefix": "jhi",
     "enableTranslation": true,
+    "nativeLanguage": "en",
     "languages": [
       "en",
       "ja"
-    ],
-    "herokuDeployType": "jar"
+    ]
   }
 }

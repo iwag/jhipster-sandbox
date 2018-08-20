@@ -2,6 +2,7 @@ package io.github.iwag.jblog;
 
 import io.github.iwag.jblog.config.ApplicationProperties;
 import io.github.iwag.jblog.config.DefaultProfileUtil;
+
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class BlogApp {
     }
 
     /**
-     * Initializes blog.
+     * Initializes jblog.
      * <p>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
      * <p>

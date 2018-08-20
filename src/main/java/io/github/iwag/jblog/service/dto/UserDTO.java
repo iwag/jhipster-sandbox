@@ -1,7 +1,7 @@
 package io.github.iwag.jblog.service.dto;
 
-
 import io.github.iwag.jblog.config.Constants;
+
 import io.github.iwag.jblog.domain.Authority;
 import io.github.iwag.jblog.domain.User;
 
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -75,11 +75,11 @@ public class UserDTO {
             .collect(Collectors.toSet());
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

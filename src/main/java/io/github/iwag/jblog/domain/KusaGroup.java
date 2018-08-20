@@ -1,9 +1,6 @@
 package io.github.iwag.jblog.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -17,7 +14,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "kusa_group")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class KusaGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,7 +30,6 @@ public class KusaGroup implements Serializable {
     private String body;
 
     @OneToMany(mappedBy = "kusaGroup")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<KusaActivity> actvities = new HashSet<>();
 
     @ManyToOne

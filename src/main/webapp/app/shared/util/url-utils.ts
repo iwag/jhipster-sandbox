@@ -3,5 +3,5 @@ export const getLoginUrl = () => {
   if (port === ':9000') {
     port = ':8080';
   }
-  return `//${location.hostname}${port}/getToken`;
+  return `//${location.hostname}${port}/twitter/login`;
 };

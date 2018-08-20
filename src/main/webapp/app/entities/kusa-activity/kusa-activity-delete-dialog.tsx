@@ -34,7 +34,7 @@ export class KusaActivityDeleteDialog extends React.Component<IKusaActivityDelet
           <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
         </ModalHeader>
         <ModalBody>
-          <Translate contentKey="blogApp.kusaActivity.delete.question" interpolate={{ id: kusaActivityEntity.id }}>
+          <Translate contentKey="jblogApp.kusaActivity.delete.question" interpolate={{ id: kusaActivityEntity.id }}>
             Are you sure you want to delete this KusaActivity?
           </Translate>
         </ModalBody>

@@ -50,11 +50,6 @@ public class KusaGroupResourceIntTest {
     @Autowired
     private KusaGroupRepository kusaGroupRepository;
 
-    @Autowired
-    private KusaActivityRepository kusaActivityRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -71,6 +66,12 @@ public class KusaGroupResourceIntTest {
     private MockMvc restKusaGroupMockMvc;
 
     private KusaGroup kusaGroup;
+
+    @Autowired
+    private  KusaActivityRepository kusaActivityRepository;
+
+    @Autowired
+    private  UserRepository userRepository;
 
     @Before
     public void setup() {

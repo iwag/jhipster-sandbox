@@ -1,6 +1,6 @@
 
 {
-    "blogApp": {
+    "jblogApp": {
         "kusaActivity" : {
             "home": {
                 "title": "KusaActivities",
@@ -17,6 +17,7 @@
                 "title": "Kusa Activity"
             },
             "doneAt": "Done At",
+            "count": "Count",
             "kusaGroup": "Kusa Group"
         }
     }

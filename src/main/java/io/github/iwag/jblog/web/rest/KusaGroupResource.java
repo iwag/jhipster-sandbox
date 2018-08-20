@@ -66,6 +66,7 @@ public class KusaGroupResource {
             userRepository.save(kusaGroup.getUser());
         });
 
+
         KusaGroup result = kusaGroupRepository.save(kusaGroup);
         return ResponseEntity.created(new URI("/api/kusa-groups/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -117,8 +118,10 @@ public class KusaGroupResource {
     public ResponseEntity<KusaGroup> getKusaGroup(@PathVariable Long id) {
         log.debug("REST request to get KusaGroup : {}", id);
         Optional<KusaGroup> kusaGroup = kusaGroupRepository.findById(id);
+
         List<KusaActivity> list = kusaActivityRepository.findAllByGroupId(kusaGroup.get().getId());
         kusaGroup.ifPresent(c -> c.setActvities(new HashSet<>(list)));
+
         return ResponseUtil.wrapOrNotFound(kusaGroup);
     }
 

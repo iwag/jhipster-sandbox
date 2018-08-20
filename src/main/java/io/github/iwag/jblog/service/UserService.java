@@ -3,27 +3,32 @@ package io.github.iwag.jblog.service;
 import io.github.iwag.jblog.domain.Authority;
 import io.github.iwag.jblog.domain.User;
 import io.github.iwag.jblog.repository.AuthorityRepository;
+import io.github.iwag.jblog.repository.PersistentTokenRepository;
 import io.github.iwag.jblog.config.Constants;
 import io.github.iwag.jblog.repository.UserRepository;
 import io.github.iwag.jblog.security.AuthoritiesConstants;
 import io.github.iwag.jblog.security.SecurityUtils;
+import io.github.iwag.jblog.service.util.RandomUtil;
 import io.github.iwag.jblog.service.dto.UserDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import io.github.iwag.jblog.web.rest.errors.InvalidPasswordException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,14 +44,106 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
+    private final PersistentTokenRepository persistentTokenRepository;
+
     private final AuthorityRepository authorityRepository;
 
-    private final CacheManager cacheManager;
-
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, PersistentTokenRepository persistentTokenRepository, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
-        this.cacheManager = cacheManager;
+    }
+
+    public Optional<User> activateRegistration(String key) {
+        log.debug("Activating user for activation key {}", key);
+        return userRepository.findOneByActivationKey(key)
+            .map(user -> {
+                // activate given user for the registration key.
+                user.setActivated(true);
+                user.setActivationKey(null);
+                log.debug("Activated user: {}", user);
+                return user;
+            });
+    }
+
+    public Optional<User> completePasswordReset(String newPassword, String key) {
+       log.debug("Reset user password for reset key {}", key);
+
+       return userRepository.findOneByResetKey(key)
+           .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
+           .map(user -> {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                user.setResetKey(null);
+                user.setResetDate(null);
+                return user;
+           });
+    }
+
+    public Optional<User> requestPasswordReset(String mail) {
+        return userRepository.findOneByEmailIgnoreCase(mail)
+            .filter(User::getActivated)
+            .map(user -> {
+                user.setResetKey(RandomUtil.generateResetKey());
+                user.setResetDate(Instant.now());
+                return user;
+            });
+    }
+
+    public User registerUser(UserDTO userDTO, String password) {
+
+        User newUser = new User();
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setLogin(userDTO.getLogin());
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setLangKey(userDTO.getLangKey());
+        // new user is not active
+        newUser.setActivated(false);
+        // new user gets registration key
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        newUser.setAuthorities(authorities);
+        userRepository.save(newUser);
+        log.debug("Created Information for User: {}", newUser);
+        return newUser;
+    }
+
+    public User createUser(UserDTO userDTO) {
+        User user = new User();
+        user.setLogin(userDTO.getLogin());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setImageUrl(userDTO.getImageUrl());
+        if (userDTO.getLangKey() == null) {
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        } else {
+            user.setLangKey(userDTO.getLangKey());
+        }
+        if (userDTO.getAuthorities() != null) {
+            Set<Authority> authorities = userDTO.getAuthorities().stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
+        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        user.setPassword(encryptedPassword);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        user.setActivated(true);
+        userRepository.save(user);
+        log.debug("Created Information for User: {}", user);
+        return user;
     }
 
     /**
@@ -67,7 +164,6 @@ public class UserService {
                 user.setEmail(email);
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
-                this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -84,7 +180,6 @@ public class UserService {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(user -> {
-                this.clearUserCaches(user);
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
@@ -99,7 +194,6 @@ public class UserService {
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
-                this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
@@ -109,9 +203,22 @@ public class UserService {
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
-            this.clearUserCaches(user);
             log.debug("Deleted User: {}", user);
         });
+    }
+
+    public void changePassword(String currentClearTextPassword, String newPassword) {
+        SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user -> {
+                String currentEncryptedPassword = user.getPassword();
+                if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                    throw new InvalidPasswordException();
+                }
+                String encryptedPassword = passwordEncoder.encode(newPassword);
+                user.setPassword(encryptedPassword);
+                log.debug("Changed password for User: {}", user);
+            });
     }
 
     @Transactional(readOnly = true)
@@ -135,39 +242,41 @@ public class UserService {
     }
 
     /**
+     * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
+     * 30 days.
+     * <p>
+     * This is scheduled to get fired everyday, at midnight.
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void removeOldPersistentTokens() {
+        LocalDate now = LocalDate.now();
+        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).forEach(token -> {
+            log.debug("Deleting token {}", token.getSeries());
+            User user = token.getUser();
+            user.getPersistentTokens().remove(token);
+            persistentTokenRepository.delete(token);
+        });
+    }
+
+    /**
+     * Not activated users should be automatically deleted after 3 days.
+     * <p>
+     * This is scheduled to get fired everyday, at 01:00 (am).
+     */
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void removeNotActivatedUsers() {
+        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS));
+        for (User user : users) {
+            log.debug("Deleting not activated user {}", user.getLogin());
+            userRepository.delete(user);
+        }
+    }
+
+    /**
      * @return a list of all the authorities
      */
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
-    }
-
-    /**
-     * Returns the user for a OAuth2 authentication.
-     * Synchronizes the user in the local repository
-     *
-     * @param authentication OAuth2 authentication
-     * @return the user from the authentication
-     */
-    @SuppressWarnings("unchecked")
-    public UserDTO getUserFromAuthentication(OAuth2Authentication authentication) {
-        Object oauth2AuthenticationDetails = authentication.getDetails(); // should be an OAuth2AuthenticationDetails
-        Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
-        User user = getUser(details);
-        Set<Authority> userAuthorities = extractAuthorities(authentication, details);
-        user.setAuthorities(userAuthorities);
-
-        // convert Authorities to GrantedAuthorities
-        Set<GrantedAuthority> grantedAuthorities = userAuthorities.stream()
-            .map(Authority::getName)
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toSet());
-
-        UsernamePasswordAuthenticationToken token = getToken(details, user, grantedAuthorities);
-        authentication = new OAuth2Authentication(authentication.getOAuth2Request(), token);
-        authentication.setDetails(oauth2AuthenticationDetails); // must be present in a gateway for TokenRelayFilter to work
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return new UserDTO(syncUserWithIdP(details, user));
     }
 
     public UserDTO getUserFromAuthentication( Map<String, Object> details) {
@@ -177,6 +286,7 @@ public class UserService {
         List<String> authorities = Arrays.asList(AuthoritiesConstants.USER);
         Set<Authority> userAuthorities = extractAuthorities(authorities);
         user.setAuthorities(userAuthorities);
+        user.setPassword("NA");
 
         // convert Authorities to GrantedAuthorities
         Set<GrantedAuthority> grantedAuthorities = userAuthorities.stream()
@@ -196,6 +306,7 @@ public class UserService {
         List<String> authorities = Arrays.asList(AuthoritiesConstants.USER);
         Set<Authority> userAuthorities = extractAuthorities(authorities);
         user.setAuthorities(userAuthorities);
+        user.setPassword("NA");
 
         return new UserDTO(syncUserWithIdP((Map<String, Object>) oauth2AuthenticationDetails, user));
     }
@@ -234,7 +345,7 @@ public class UserService {
         } else {
             log.debug("Saving user '{}' in local database", user.getLogin());
             userRepository.save(user);
-            this.clearUserCaches(user);
+            //this.clearUserCaches(user);
         }
         return user;
     }
@@ -251,27 +362,11 @@ public class UserService {
         return token;
     }
 
-    @SuppressWarnings("unchecked")
-    private static Set<Authority> extractAuthorities(OAuth2Authentication authentication, Map<String, Object> details) {
-        Set<Authority> userAuthorities;
-        // get roles from details
-        if (details.get("roles") != null) {
-            userAuthorities = extractAuthorities((List<String>) details.get("roles"));
-            // if roles don't exist, try groups
-        } else if (details.get("groups") != null) {
-            userAuthorities = extractAuthorities((List<String>) details.get("groups"));
-        } else {
-            userAuthorities = authoritiesFromStringStream(
-                authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-            );
-        }
-        return userAuthorities;
-    }
 
     private static User getUser(Map<String, Object> details) {
+        if (details == null) return null;
         User user = new User();
-        user.setId((String) details.get("sub"));
+        user.setId((Long) details.get("sub"));
         user.setLogin((String) details.get("preferred_username"));
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
@@ -314,9 +409,5 @@ public class UserService {
             }).collect(Collectors.toSet());
     }
 
-    private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
-    }
-
 }
+

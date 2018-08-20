@@ -1,8 +1,6 @@
 package io.github.iwag.jblog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -15,7 +13,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "kusa_activity")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class KusaActivity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,6 +24,9 @@ public class KusaActivity implements Serializable {
 
     @Column(name = "done_at")
     private ZonedDateTime doneAt;
+
+    @Column(name = "count")
+    private Integer count;
 
     @ManyToOne
     @JsonIgnoreProperties("actvities")
@@ -52,6 +52,19 @@ public class KusaActivity implements Serializable {
 
     public void setDoneAt(ZonedDateTime doneAt) {
         this.doneAt = doneAt;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public KusaActivity count(Integer count) {
+        this.count = count;
+        return this;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public KusaGroup getKusaGroup() {
@@ -93,6 +106,7 @@ public class KusaActivity implements Serializable {
         return "KusaActivity{" +
             "id=" + getId() +
             ", doneAt='" + getDoneAt() + "'" +
+            ", count=" + getCount() +
             "}";
     }
 }

@@ -24,10 +24,10 @@ export class KusaGroup extends React.Component<IKusaGroupProps> {
     return (
       <div>
         <h2 id="kusa-group-heading">
-          <Translate contentKey="blogApp.kusaGroup.home.title">Kusa Groups</Translate>
+          <Translate contentKey="jblogApp.kusaGroup.home.title">Kusa Groups</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
             <FontAwesomeIcon icon="plus" />&nbsp;
-            <Translate contentKey="blogApp.kusaGroup.home.createLabel">Create new Kusa Group</Translate>
+            <Translate contentKey="jblogApp.kusaGroup.home.createLabel">Create new Kusa Group</Translate>
           </Link>
         </h2>
         <div className="table-responsive">
@@ -38,13 +38,13 @@ export class KusaGroup extends React.Component<IKusaGroupProps> {
                   <Translate contentKey="global.field.id">ID</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="blogApp.kusaGroup.title">Title</Translate>
+                  <Translate contentKey="jblogApp.kusaGroup.title">Title</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="blogApp.kusaGroup.body">Body</Translate>
+                  <Translate contentKey="jblogApp.kusaGroup.body">Body</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="blogApp.kusaGroup.user">User</Translate>
+                  <Translate contentKey="jblogApp.kusaGroup.user">User</Translate>
                 </th>
                 <th />
               </tr>

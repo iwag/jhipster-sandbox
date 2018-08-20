@@ -1,0 +1,24 @@
+
+{
+    "jblogApp": {
+        "kusaActivity" : {
+            "home": {
+                "title": "Kusa Activities",
+                "createLabel": "Create a new Kusa Activity",
+                "createOrEditLabel": "Create or edit a Kusa Activity"
+            },
+            "created": "A new Kusa Activity is created with identifier {{ param }}",
+            "updated": "A Kusa Activity is updated with identifier {{ param }}",
+            "deleted": "A Kusa Activity is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Kusa Activity {{ id }}?"
+            },
+            "detail": {
+                "title": "Kusa Activity"
+            },
+            "doneAt": "Done At",
+            "count": "Count",
+            "kusaGroup": "Kusa Group"
+        }
+    }
+}
