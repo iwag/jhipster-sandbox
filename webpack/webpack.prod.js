@@ -31,7 +31,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         loader: 'stripcomment-loader'
       },
       {
-        test: /\.css$/,
+        test: /\.(sa|sc|c)ss$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -39,9 +39,11 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
               publicPath: '../'
             }
           },
-          'css-loader'
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
         ]
-      }
+      },
     ]
   },
   optimization: {

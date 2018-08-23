@@ -1,14 +1,14 @@
 version: '2'
 services:
     jblog-app:
-        image: jblog
+        image: blog
         environment:
             # - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATASOURCE_URL=jdbc:postgresql://jblog-postgresql:5432/jblog
-            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+            - JHIPSTER_SLEEP=20 # gives time for the database to boot before the application
         ports:
-            - 8080:8080
+            - 58080:8080
     jblog-postgresql:
         extends:
             file: postgresql.yml
