@@ -220,8 +220,6 @@ dependencies {
     compile "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 
-    compile("org.springframework.boot:spring-boot-starter-data-redis")
-    testCompile("it.ozimov:embedded-redis:0.7.1")
     compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.6'
     compile 'org.komamitsu:fluency:1.6.0'
     compile 'com.sndyuk:logback-more-appenders:1.4.3'
