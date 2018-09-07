@@ -79,8 +79,8 @@ public class TwitterController {
         Twitter twitter = null;
 
         //set the consumer key and secret for our app
-        String consumerKey = "BieJks58flLyB0qRP320Or1Qm";
-        String consumerSecret = "jTxahoVX1wk1GKHNADrjhDHahaHEqFXshiyNaDGcCr0nalPf15";
+        String consumerKey = "-";
+        String consumerSecret = "-";
 
         //build the configuration
         ConfigurationBuilder builder = new ConfigurationBuilder();
